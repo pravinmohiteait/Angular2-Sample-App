@@ -1,5 +1,5 @@
 import { Component }       from 'angular2/core';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
+import { Router, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
 
 import {Hero} from './hero';
 import { HeroService }     from './hero.service';
@@ -13,15 +13,16 @@ import { HeroDetailComponent } from './hero-detail.component';
   selector: 'my-app',
 template: `
   <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
+      <div>
         <div class="navbar-header">
+         <div class="sidebar-toggle-btn"><i class="hand-cursor fa fa-bars fa-2x" aria-hidden="true" (click)="toggleSidebar()"></i></div>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">Sample Application</a>
         </div>
         
         <div id="navbar" class="navbar-collapse collapse">
@@ -35,12 +36,14 @@ template: `
     </nav>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="sidebar">
           <ul class="nav nav-sidebar">         
-            <li  *ngFor="#menu of menus"><a [routerLink]="['Dashboard']">{{menu.name}}<span class="sr-only">(current)</span></a></li>
+            <li [class.active]="router.isRouteActive(router.generate(['/Dashboard']))"><a [routerLink]="['Dashboard']">Dashboard<span class="sr-only">(current)</span></a></li>
+            <li [class.active]="router.isRouteActive(router.generate(['/Heroes']))"><a [routerLink]="['Heroes']">Heroes<span class="sr-only">(current)</span></a></li>
+            <li [class.active]="router.isRouteActive(router.generate(['/Heroes']))"><a [routerLink]="['Heroes']">Heroes<span class="sr-only">(current)</span></a></li>
           </ul>
        </div>
-       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+       <div class="col-sm-12 col-md-12 main">
            <router-outlet></router-outlet>
        </div>
     </div>
@@ -79,13 +82,24 @@ template: `
 export class AppComponent {
   title = 'Tour of Heroes';
     menus: Hero[];
+    
    constructor(
-    private _menuService: MenuService) { }
+    private _menuService: MenuService, private router: Router) { }
   getMenuItems() {
     this._menuService.getMenuItems().then(heroes => this.menus = heroes);
   }
+  public isRouteActive(route) {
+    return this.router.isRouteActive(this.router.generate(route))
+}
   ngOnInit() {
     this.getMenuItems();
+  }
+  toggleSidebar()
+  {
+    if(document.getElementsByClassName('sidebar')[0].classList.contains("open"))
+      document.getElementsByClassName('sidebar')[0].classList.remove("open")
+    else
+      document.getElementsByClassName('sidebar')[0].classList.add("open")
   }
   
 }
