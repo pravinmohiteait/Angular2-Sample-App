@@ -5,6 +5,8 @@ import {Hero} from './hero';
 import { HeroService }     from './hero.service';
 import { MenuService }     from './menu.service';
 import { DashboardComponent } from './dashboard.component';
+import { ContactUsComponent } from './contact-us.component';
+
 import { HeroesComponent } from './heroes.component';
 import { HeroDetailComponent } from './hero-detail.component';
 
@@ -40,10 +42,10 @@ template: `
           <ul class="nav nav-sidebar">         
             <li [class.active]="router.isRouteActive(router.generate(['/Dashboard']))"><a [routerLink]="['Dashboard']">Dashboard<span class="sr-only">(current)</span></a></li>
             <li [class.active]="router.isRouteActive(router.generate(['/Heroes']))"><a [routerLink]="['Heroes']">Heroes<span class="sr-only">(current)</span></a></li>
-            <li [class.active]="router.isRouteActive(router.generate(['/Heroes']))"><a [routerLink]="['Heroes']">Heroes<span class="sr-only">(current)</span></a></li>
+            <li [class.active]="router.isRouteActive(router.generate(['/ContactUs']))"><a [routerLink]="['ContactUs']">ContactUs<span class="sr-only">(current)</span></a></li>
           </ul>
        </div>
-       <div class="col-sm-12 col-md-12 main">
+       <div class="col-sm-12 col-md-12 main" (click)="closeSidebar()">
            <router-outlet></router-outlet>
        </div>
     </div>
@@ -73,6 +75,11 @@ template: `
 
 },
 {
+  path: '/ContactUs',
+  name: 'ContactUs',
+  component: ContactUsComponent,
+},
+{
   path: '/detail/:id',
   name: 'HeroDetail',
   component: HeroDetailComponent
@@ -94,12 +101,15 @@ export class AppComponent {
   ngOnInit() {
     this.getMenuItems();
   }
-  toggleSidebar()
-  {
+  toggleSidebar() {
     if(document.getElementsByClassName('sidebar')[0].classList.contains("open"))
       document.getElementsByClassName('sidebar')[0].classList.remove("open")
     else
       document.getElementsByClassName('sidebar')[0].classList.add("open")
+  }
+  closeSidebar() {
+    if(document.getElementsByClassName('sidebar')[0].classList.contains("open"))
+      document.getElementsByClassName('sidebar')[0].classList.remove("open")
   }
   
 }
